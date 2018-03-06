@@ -1,0 +1,34 @@
+// KEYFRAME mixin for Unique animations
+.keyframes(@name; @arguments) {
+	@-webkit-keyframes @name {
+		@arguments();
+	}
+
+	@-moz-keyframes @name {
+		@arguments();
+	}
+
+	@-o-keyframes @name {
+		@arguments();
+	}
+
+	@keyframes @name {
+		@arguments();
+	}
+}
+
+//animation delay
+.animation-delay(@sec) {
+	-webkit-animation-delay: ~"@{sec}s";
+	-moz-animation-delay: ~"@{sec}s";
+	-o-animation-delay: ~"@{sec}s";
+	animation-delay: ~"@{sec}s";
+}
+
+//.animation(dropHeader 1 ease-in .3s);
+.animation(@animation){
+	-moz-animation: @animation;
+	-webkit-animation: @animation;
+	-o-animation: @animation;
+	animation: @animation;
+}

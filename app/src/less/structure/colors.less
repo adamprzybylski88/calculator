@@ -1,0 +1,119 @@
+@black: #000;
+@white: #fff;
+@dark: #0c0c0c;
+
+// BRAND COLORS
+@pink: #fc335e;
+
+//icon colors
+@ic-pink: #FC335E;
+@ic-violet: #9579F8;
+
+// @ic-green: #6FC886;
+@ic-green: #98E7E7;
+@ic-blue: #15C6EE;
+
+//socials
+@social_fb: #3a579d;
+@social_twitter: #77c5fb;
+@social_in: #0c72b1;
+
+//johnsonbox
+@cc-pale-beige: #ffffde;
+
+// <code></code>
+@code-color-bg: #f8f8f8;
+@code-color: #333;
+
+//transparents
+@white75: rgba(255,255,255,.75);
+@white50: rgba(255,255,255,.5);
+@white25: rgba(255,255,255,.25);
+@white10: rgba(255,255,255,.1);
+@black75: rgba(0,0,0,.75);
+@black50: rgba(0,0,0,.5);
+@black25: rgba(0,0,0,.25);
+@transparent: rgba(255,255,255,0);
+
+//silvers
+@silver-10: lighten(@black, 10%);
+@silver-14: lighten(@black, 14%);
+@silver-20: lighten(@black, 20%);
+@silver-40: lighten(@black, 40%);
+@silver-50: lighten(@black, 50%);
+@silver-60: lighten(@black, 60%);
+@silver-70: lighten(@black, 70%);
+@silver-80: lighten(@black, 80%);
+@silver-90: lighten(@black, 90%);
+@silver-95: lighten(@black, 95%);
+
+//gray 1a
+@gray1a: @silver-10;
+
+//gray 333
+@gray3: @silver-20;
+
+//gray 666
+@gray6: @silver-40;
+
+//gray 808080
+@gray80: @silver-50;
+
+//gray 999
+@gray9: @silver-60;
+
+//gray B3
+@grayB3: @silver-70;
+
+//gray ccc
+@grayC: @silver-80;
+
+//gray e6e6e6
+@grayE6: @silver-90;
+
+//gray f2f2f2
+@grayF2: @silver-95;
+
+//other gray's
+@gray-bg: #EBF0F2;
+@gray-border: #D2D7D9;
+
+
+/* COLORS */
+@colors:
+
+// name
+pink
+// hash
+@pink;
+
+/* COLORS end */
+
+
+/* COLORTONE MIXINS */
+@colortones:
+
+// name
+pink
+// p
+@base-p
+// a
+@base-a
+darken(@base-a, 10%)
+// li
+@base-p
+pink
+@pink
+// btn
+@pink
+darken(pink, 10%)
+@white;
+
+/* COLORTONES end */
+
+@borderColors:
+color_gray
+@grayF2,
+
+color_gray-darker
+@grayC;

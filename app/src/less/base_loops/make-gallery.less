@@ -1,0 +1,47 @@
+.cont-width(@cw, @cn) {
+	@cl: length(@cont-widths);
+
+	.cont-loop(@i) when (@i > 0) {
+		@width: extract(@cw, @i);
+		@name: extract(@cn, @i);
+
+		// construction
+		&.cont-@{name} {
+			ol,
+			ul {
+				li {
+					.max-width(@width);
+				}
+			}
+
+			p {
+				.max-width(@width);
+			}
+		}
+
+		// end construction
+		.cont-loop(@i - 1);
+	}
+
+	// .cont-loop(0) {}
+	.cont-loop(@cl);
+}
+
+.post-gallery-cols(@col-count) {
+	.cont-loop(@i) when (@i > 0) {
+
+		@col-math: (100% / @i) - 3%;
+
+		// construction
+		&.gallery-columns-@{i} {
+			figure {
+				width: @col-math;
+				max-width: @col-math;
+			}
+		}
+
+		// end construction
+		.cont-loop(@i - 1);
+	}
+	.cont-loop(@col-count);
+}
