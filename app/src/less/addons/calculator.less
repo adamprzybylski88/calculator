@@ -2,8 +2,12 @@ body {
 	background-color: @dark;
 }
 
+#app_wrapper_html .container .turbobox,
 #app_wrapper .container .turbobox {
-	height: 100vh;
+	height: 50vh;
+	//
+	//mixins
+	@size: 80;
 
 	#app {
 		position: relative;
@@ -11,6 +15,77 @@ body {
 		.calculator {
 			display: table;
 			.marg-auto();
+
+			.calculator-display {
+				position: relative;
+				overflow: hidden;
+				.height(100);
+				background-color: @black;
+
+				span {
+					display: inline-block;
+					.padd(0,30,0,30);
+					transform-origin: right;
+					color: white;
+					.font(900);
+					.font-size(72,36);
+					position: absolute;
+					right: 0;
+				}
+			}
+
+			.calculator-keypad {
+				.turbotable;
+				.turbocustom;
+
+				.keys_inputs,
+				.keys_operations {
+					button {
+						.dims(@size,@size);
+						text-align: center;
+						display: block;
+						.font(500);
+						cursor: pointer;
+						.transition(all .2s);
+					}
+				}
+
+				.keys_inputs {
+					width: 100% / 3 * 2;
+					.width(@size * 3);
+					.turbotable;
+					.turbocustom;
+
+					button {
+						width: 100% / 3;
+						background-color: @grayE6;
+						.font-size(28,0);
+
+						&:hover {
+							background-color: @white;
+						}
+					}
+				}
+
+				.keys_operations {
+					width: 100% / 3 * 1;
+					.width(@size);
+
+					button {
+						color: white;
+						background-color: @pink;
+						.font-size(42,0);
+
+						&.key-equals {
+							.height(@size * 2);
+						}
+
+						&:hover {
+							background-color: @ic-blue;
+						}
+					}
+				}
+			}
 		}
 	}
 }

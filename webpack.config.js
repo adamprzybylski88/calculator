@@ -39,3 +39,27 @@ module.exports = {
 		fs: "empty"
 	}
 };
+
+// module.exports = {
+// 	context: __dirname + '/app',
+// 	entry: './src/less/_base_structure.less',
+//     module: {
+//         rules: [{
+//             test: /\.less$/,
+//             use: [
+// 			// {
+//             //     loader: "style-loader" // creates style nodes from JS strings
+//             // }, {
+//             //     loader: "css-loader" // translates CSS into CommonJS
+//             // },
+// 			{
+//                 loader: "less-loader" // compiles Less to CSS
+//             }
+// 			]
+//         }]
+//     },
+// 	output: {
+// 		path: __dirname + '/app',
+// 		filename: './dist/css/style.css'
+// 	}
+// };

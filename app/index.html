@@ -2,17 +2,55 @@
 <html>
 
 <head>
-	<meta charset="utf=8">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>React page</title>
-	<link rel="stylesheet" href="./dist/css/style.css">
+	<link rel="stylesheet" href="./dist/css/style.css" type="text/css" media="all">
 </head>
 
 <body>
 
+	<div id="app_wrapper"></div>
+
 	<div id="app_wrapper">
 		<div class="container">
 			<div class="turbobox td_mid td_center">
-				<div id="app"></div>
+				<div id="app">
+
+					<div class="calculator">
+
+						<div class="calculator-display"><span>0</span></div>
+
+						<div class="calculator-keypad">
+							<div class="keys_inputs">
+								<button>7</button>
+								<button>8</button>
+								<button>9</button>
+
+								<button>4</button>
+								<button>5</button>
+								<button>6</button>
+
+								<button>1</button>
+								<button>2</button>
+								<button>3</button>
+
+								<button class="key-clear">AC</button>
+								<button>0</button>
+								<button class="key-dot">.</button>
+							</div>
+
+							<div class="keys_operations">
+								<button>−</button>
+								<button>+</button>
+								<button class="key-equals">=</button>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
 			</div>
 		</div>
 	</div>

@@ -12,12 +12,13 @@ class CalcDisplay extends React.Component {
   	}
 }
 
+
 class Calculator extends React.Component {
 
 }
 
 
 const app = document.getElementById('app')
-ReactDOM.render(
-	<Calculator/>,app
-)
+// ReactDOM.render(
+// 	<Calculator/>,app
+// )
