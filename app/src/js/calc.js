@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PointTarget from 'react-point'
 
-// define module - calculator display
+// define calculator display
 class CalcDisplay extends React.Component {
   	render() {
 		const { value } = this.props
@@ -15,21 +15,15 @@ class CalcDisplay extends React.Component {
   	}
 }
 
+// define all calculator keys
 class CalcKey extends React.Component {
-	state = {
-    	displayVal: '0'
-  	};
-	inputDigit(digit) {
-		const { displayVal } = this.state
-
-		console.log(digit)
-	}
-
 	render() {
-		const { ...props } = this.props
+		const { calcKeyPress, ...props } = this.props
 
 		return (
-			<button onClick={() => this.inputDigit(...props.children)} { ...props }></button>
+			<PointTarget onPoint={calcKeyPress}>
+				<button { ...props }></button>
+			</PointTarget>
 		)
 	}
 }
@@ -43,6 +37,33 @@ class Calculator extends React.Component {
     	displayVal: '0'
   	};
 
+	// reset calculator
+	resetCalc() {
+		this.setState({
+			displayVal: '0'
+		})
+	}
+
+	//
+	setDigit(digit) {
+		const { displayVal } = this.state
+		console.log(displayVal)
+		this.setState({
+			displayVal: digit.toString()
+		})
+	}
+
+	//
+	insertDot() {
+
+	}
+
+	//
+	makeOperation(_operator) {
+		const { displayVal } = this.state
+		console.log(displayVal)
+	}
+
 	render() {
 		const { displayVal } = this.state
 
@@ -53,26 +74,26 @@ class Calculator extends React.Component {
 
 		        <div className="calculator-keypad">
 					<div className="keys_inputs">
-						<CalcKey>7</CalcKey>
-						<CalcKey>8</CalcKey>
-						<CalcKey>9</CalcKey>
+						<CalcKey calcKeyPress={() => this.setDigit(7)}>7</CalcKey>
+						<CalcKey calcKeyPress={() => this.setDigit(8)}>8</CalcKey>
+						<CalcKey calcKeyPress={() => this.setDigit(9)}>9</CalcKey>
 
-						<CalcKey>4</CalcKey>
-						<CalcKey>5</CalcKey>
-						<CalcKey>6</CalcKey>
+						<CalcKey calcKeyPress={() => this.setDigit(4)}>4</CalcKey>
+						<CalcKey calcKeyPress={() => this.setDigit(5)}>5</CalcKey>
+						<CalcKey calcKeyPress={() => this.setDigit(6)}>6</CalcKey>
 
-						<CalcKey>1</CalcKey>
-						<CalcKey>2</CalcKey>
-						<CalcKey>3</CalcKey>
+						<CalcKey calcKeyPress={() => this.setDigit(1)}>1</CalcKey>
+						<CalcKey calcKeyPress={() => this.setDigit(2)}>2</CalcKey>
+						<CalcKey calcKeyPress={() => this.setDigit(3)}>3</CalcKey>
 
-						<CalcKey className="key-clear">AC</CalcKey>
-						<CalcKey>0</CalcKey>
-						<CalcKey className="key-dot">.</CalcKey>
+						<CalcKey calcKeyPress={() => this.resetCalc()}>AC</CalcKey>
+						<CalcKey calcKeyPress={() => this.setDigit(0)}>0</CalcKey>
+						<CalcKey calcKeyPress={() => this.insertDot()}>.</CalcKey>
 					</div>
 					<div className="keys_operations">
-						<CalcKey className="key-subtract">−</CalcKey>
-						<CalcKey className="key-add">+</CalcKey>
-						<CalcKey className="key-equals">=</CalcKey>
+						<CalcKey className="key-subtract" calcKeyPress={() => this.makeOperation('-')}>−</CalcKey>
+						<CalcKey className="key-add" calcKeyPress={() => this.makeOperation('+')}>+</CalcKey>
+						<CalcKey className="key-equals" calcKeyPress={() => this.makeOperation('=')}>=</CalcKey>
 					</div>
 				</div>
 			</div>
