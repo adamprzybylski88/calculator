@@ -16,13 +16,20 @@ class CalcDisplay extends React.Component {
 }
 
 class CalcKey extends React.Component {
+	state = {
+    	displayVal: '0'
+  	};
+	inputDigit(digit) {
+		const { displayVal } = this.state
+
+		console.log(digit)
+	}
+
 	render() {
 		const { ...props } = this.props
 
 		return (
-			<PointTarget>
-				<button { ...props }/>
-			</PointTarget>
+			<button onClick={() => this.inputDigit(...props.children)} { ...props }></button>
 		)
 	}
 }
