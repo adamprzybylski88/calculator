@@ -138,7 +138,7 @@ class Calculator extends React.Component {
 		} else if (operator) {
 			const currentValue = value || 0
 			const newValue = operations[operator](currentValue, inputValue)
-			let decimalLength = 1000000 // 6 
+			let decimalLength = 1000000 // 6
 			const formattedValue = Math.round(parseFloat(newValue) * decimalLength) / decimalLength;
 
 			this.setState({
