@@ -4,36 +4,43 @@ const webpack = require('webpack');
 
 module.exports = {
 	context: __dirname + '/app',
-	devtool: debug
-		? "inline-sourcemap"
-		: null,
+	devtool: debug ?
+		"inline-sourcemap" :
+		null,
 	entry: './src/js/calc.js',
+	// devServer: {
+	// 	hot: true,
+	// 	inline: true,
+	// 	port: 7700,
+	// 	historyApiFallback: true,
+	// },
 	module: {
-		loaders: [
-			{
-				test: /\.js?$/,
-				exclude: /(node_modules|bower_components)/,
-				loader: 'babel-loader',
-				query: {
-					presets: [
-						'react', 'es2015', 'stage-0'
-					],
-					// plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-leacy']
-					plugins: ['react-html-attrs', 'transform-class-properties']
-				}
+		loaders: [{
+			test: /\.js?$/,
+			exclude: /(node_modules|bower_components)/,
+			loader: 'babel-loader',
+			query: {
+				presets: [
+					'react', 'es2015', 'stage-0'
+				],
+				// plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-leacy']
+				plugins: ['react-html-attrs', 'transform-class-properties']
 			}
-		]
+		}]
 	},
 	output: {
 		path: __dirname + '/app',
 		filename: './dist/app.js'
 	},
-	plugins: debug
-		? []
-		: [
+	plugins: debug ?
+		[] :
+		[
 			new webpack.optimize.DedupePlugin(),
 			new webpack.optimize.OccurenceOrderPlugin(),
-			new webpack.optimize.UglifyJsPlugin({mangle: false, sourcemap: false})
+			new webpack.optimize.UglifyJsPlugin({
+				mangle: false,
+				sourcemap: false
+			})
 		],
 	node: {
 		fs: "empty"

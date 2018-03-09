@@ -4,15 +4,19 @@ import PointTarget from 'react-point'
 
 // define calculator display
 class CalcDisplay extends React.Component {
-  	render() {
+	render() {
 		const { value } = this.props
 
-		return (
+		let formattedValue = parseFloat(value);
+
+		console.log(formattedValue);
+
+	    return (
 			<div className="calculator-display">
-				<span>{value}</span>
+				<span>{formattedValue}</span>
 			</div>
-		)
-  	}
+	    )
+	}
 }
 
 // define all calculator keys
@@ -22,7 +26,7 @@ class CalcKey extends React.Component {
 
 		return (
 			<PointTarget onPoint={calcKeyPress}>
-				<button { ...props }></button>
+				<button { ...props }/>
 			</PointTarget>
 		)
 	}
@@ -34,34 +38,83 @@ class Calculator extends React.Component {
 	}
 
 	state = {
-    	displayVal: '0'
+    	displayVal: '0',
+		afterOperation: false,
+		value: null,
+		operator: null
   	};
 
 	// reset calculator
 	resetCalc() {
 		this.setState({
-			displayVal: '0'
+			displayVal: '0',
+			afterOperation: false,
+			value: null,
+			operator: null
 		})
 	}
 
 	//
 	setDigit(digit) {
-		const { displayVal } = this.state
-		console.log(displayVal)
-		this.setState({
-			displayVal: digit.toString()
-		})
+		const { displayVal, afterOperation } = this.state
+
+		console.log(displayVal, afterOperation)
+
+			if (afterOperation) {
+			this.setState({
+				displayVal	: String(digit),
+				afterOperation: false
+			})
+		} else {
+			this.setState({
+				displayVal: displayVal === '0' ? String(digit) : displayVal + digit
+			})
+		}
 	}
 
 	//
 	insertDot() {
+		const { displayVal } = this.state
 
+		if (!(/\./).test(displayVal)) {
+			this.setState({
+				displayVal: displayVal + '.'
+			})
+		}
 	}
 
 	//
 	makeOperation(_operator) {
-		const { displayVal } = this.state
-		console.log(displayVal)
+
+		const operations = {
+		    '+': (prevValue, nextValue) => prevValue + nextValue,
+		    '-': (prevValue, nextValue) => prevValue - nextValue,
+		    '=': (prevValue, nextValue) => nextValue
+		}
+
+		const { value, displayVal, operator } = this.state
+		const inputValue = parseFloat(displayVal)
+
+		// console.log(value, operator)
+
+		if (value == null) {
+			this.setState({
+				value: inputValue
+			})
+		} else if (operator) {
+			const currentValue = value || 0
+			const newValue = operations[operator](currentValue, inputValue)
+
+			this.setState({
+				value: newValue,
+				displayVal: String(newValue)
+			})
+		}
+
+		this.setState({
+			afterOperation: true,
+			operator: _operator
+		})
 	}
 
 	render() {
