@@ -2,24 +2,52 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PointTarget from 'react-point'
 
+class OutputScaling extends React.Component {
+	state = {
+		scale: 1
+	};
+
+	componentDidUpdate() {
+		const { scale } = this.state
+
+		const node = this.node
+
+		const parent_w = node.parentNode.offsetWidth
+		const elem_w = node.offsetWidth
+		const new_scale = parent_w / elem_w
+
+		if (scale === new_scale) return
+
+		if (new_scale < 1) {
+			this.setState({ scale: new_scale })
+		} else if (scale < 1) {
+			this.setState({ scale: 1 })
+		}
+	}
+
+	render() {
+	const { scale } = this.state
+
+		return (
+			<span style={{ transform: `scale(${scale},${scale})` }} ref={node => this.node = node}>{this.props.children}</span>
+		)
+	}
+}
+
 // define calculator display
 class CalcDisplay extends React.Component {
 	render() {
 		const { value } = this.props
 
-		let formattedValue = parseFloat(value).toLocaleString(navigator.language, {maximumFractionDigits: 3})
-
-		console.log(formattedValue);
-
 	    return (
 			<div className="calculator-display">
-				<span>{formattedValue}</span>
+				<OutputScaling>{value}</OutputScaling>
 			</div>
 	    )
 	}
 }
 
-// define all calculator keys
+// define calculator keys
 class CalcKey extends React.Component {
 	render() {
 		const { calcKeyPress, ...props } = this.props
@@ -32,6 +60,7 @@ class CalcKey extends React.Component {
 	}
 }
 
+// main function
 class Calculator extends React.Component {
 	constructor() {
 	  super();
@@ -44,7 +73,7 @@ class Calculator extends React.Component {
 		operator: null
   	};
 
-	// reset calculator
+	// AC button - reset calculator
 	resetCalc() {
 		this.setState({
 			displayVal: '0',
@@ -54,13 +83,11 @@ class Calculator extends React.Component {
 		})
 	}
 
-	//
+	// DIGIT buttons - set number
 	setDigit(digit) {
 		const { displayVal, afterOperation } = this.state
 
-		console.log(displayVal, afterOperation)
-
-			if (afterOperation) {
+		if (afterOperation) {
 			this.setState({
 				displayVal	: String(digit),
 				afterOperation: false
@@ -72,19 +99,28 @@ class Calculator extends React.Component {
 		}
 	}
 
-	//
+	// DOT button - start decimals
 	insertDot() {
-		const { displayVal } = this.state
+		const { displayVal, afterOperation } = this.state
 
-		if (!(/\./).test(displayVal)) {
+		// if begin writing from dot
+		// else if dot does not exist
+		if (afterOperation) {
+			this.setState({
+				displayVal: 0 + '.',
+				afterOperation: false
+			})
+		} else if (!(/\./).test(displayVal)) {
 			this.setState({
 				displayVal: displayVal + '.'
 			})
 		}
 	}
 
-	//
+	// OPERATION buttons actions + - =
 	makeOperation(_operator) {
+
+		const { value, displayVal, operator } = this.state
 
 		const operations = {
 		    '+': (prevValue, nextValue) => prevValue + nextValue,
@@ -92,10 +128,7 @@ class Calculator extends React.Component {
 		    '=': (prevValue, nextValue) => nextValue
 		}
 
-		const { value, displayVal, operator } = this.state
 		const inputValue = parseFloat(displayVal)
-
-		// console.log(value, operator)
 
 		if (value == null) {
 			this.setState({
@@ -104,10 +137,12 @@ class Calculator extends React.Component {
 		} else if (operator) {
 			const currentValue = value || 0
 			const newValue = operations[operator](currentValue, inputValue)
+			let decimalLength = 1000
+			const formattedValue = Math.round(parseFloat(newValue) * decimalLength) / decimalLength;
 
 			this.setState({
-				value: newValue,
-				displayVal: String(newValue)
+				value: formattedValue,
+				displayVal: String(formattedValue)
 			})
 		}
 
