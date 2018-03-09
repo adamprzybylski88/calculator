@@ -7,7 +7,7 @@ class CalcDisplay extends React.Component {
 	render() {
 		const { value } = this.props
 
-		let formattedValue = parseFloat(value);
+		let formattedValue = parseFloat(value).toLocaleString(navigator.language, {maximumFractionDigits: 3})
 
 		console.log(formattedValue);
 
