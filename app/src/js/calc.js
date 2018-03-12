@@ -90,7 +90,7 @@ class Calculator extends React.Component {
 
 		if (afterOperation) {
 			this.setState({
-				displayVal	: String(digit),
+				displayVal: String(digit),
 				afterOperation: false
 			})
 		} else {
@@ -138,8 +138,18 @@ class Calculator extends React.Component {
 		} else if (operator) {
 			const currentValue = value || 0
 			const newValue = operations[operator](currentValue, inputValue)
-			let decimalLength = 1000000 // 6
-			const formattedValue = Math.round(parseFloat(newValue) * decimalLength) / decimalLength;
+
+			let decimalLength = 6
+
+			let decimalDivider = '1';
+			for (var i = 0; i < decimalLength; i++) {
+				decimalDivider += '0'
+			}
+			decimalDivider = parseFloat(decimalDivider);
+
+			console.log(decimalDivider)
+			
+			const formattedValue = Math.round(parseFloat(newValue) * decimalDivider) / decimalDivider;
 
 			this.setState({
 				value: formattedValue,
