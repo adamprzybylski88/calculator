@@ -7,7 +7,7 @@ module.exports = {
 	devtool: debug ?
 		"inline-sourcemap" :
 		null,
-	entry: './src/js/calc.js',
+	entry: './src/js/app.js',
 	// devServer: {
 	// 	hot: true,
 	// 	inline: true,

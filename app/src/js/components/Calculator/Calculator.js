@@ -201,8 +201,4 @@ class Calculator extends React.Component {
 
 }
 
-
-const app = document.getElementById('app')
-ReactDOM.render(
-	<Calculator/>,app
-)
+export default Calculator;
