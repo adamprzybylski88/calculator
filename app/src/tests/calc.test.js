@@ -16,9 +16,10 @@ describe('<Calculator />', () => {
     const keys_operations = calc.find('div.keys_operations');
     
     // console.log(calc.html()) 
-
+    
     it('renders display and keypad elements', () => {
         expect(calc.find('div.calculator-display').length).toEqual(1);
+        expect(calc.find('div.calculator-display span').length).toEqual(1);
         expect(calc.find('div.calculator-keypad').length).toEqual(1);
 
         expect(keys_inputs.length).toEqual(1);
@@ -38,7 +39,7 @@ describe('<Calculator />', () => {
         ReactDOM.render(<Calculator/>, div);
     });
 
-    it('test calculator in action // 2.3 + 2.4 = 4.7', () => {
+    it('test calculator add action // 2.3 + 2.4 = 4.7', () => {
         calc_inst.setDigit(2)
         calc_inst.insertDot()
         calc_inst.setDigit(3)
@@ -54,7 +55,7 @@ describe('<Calculator />', () => {
         expect(calc_inst.state.operator).toEqual('=')
     })
 
-    it('test calculator in action // .9 - 0.3 = 0.6', () => {
+    it('test calculator substract action // .9 - 0.3 = 0.6', () => {
         calc_inst.insertDot()
         calc_inst.setDigit(9)
         calc_inst.makeOperation('-')

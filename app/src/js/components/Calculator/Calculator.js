@@ -41,7 +41,7 @@ class CalcDisplay extends React.Component {
 
 	    return (
 			<div className="calculator-display">
-				<OutputScaling>{value}</OutputScaling>
+				{<OutputScaling>{value}</OutputScaling>}
 			</div>
 	    )
 	}
