@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import PointTarget from 'react-point'
 
 // output scaling in calculator display
