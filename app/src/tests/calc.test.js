@@ -47,6 +47,7 @@ describe('<Calculator />', () => {
         calc_inst.insertDot()
         calc_inst.setDigit(4)
         calc_inst.makeOperation('=')
+
         expect(calc_inst.state.displayVal).toEqual('4.7')
         expect(calc_inst.state.afterOperation).toEqual(true)
         expect(calc_inst.state.value).toEqual(4.7)
@@ -55,6 +56,7 @@ describe('<Calculator />', () => {
 
     it('test button reset state', () => {
         calc_inst.resetCalc()
+        
         expect(calc_inst.state.displayVal).toEqual('0')
         expect(calc_inst.state.afterOperation).toEqual(false)
         expect(calc_inst.state.value).toEqual(null)
