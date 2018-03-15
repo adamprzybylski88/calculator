@@ -54,18 +54,18 @@ describe('<Calculator />', () => {
         expect(calc_inst.state.operator).toEqual('=')
     })
 
-    it('test calculator in action // .3 + 0.6 = 0.9', () => {
+    it('test calculator in action // .9 - 0.3 = 0.6', () => {
         calc_inst.insertDot()
-        calc_inst.setDigit(3)
-        calc_inst.makeOperation('+')
+        calc_inst.setDigit(9)
+        calc_inst.makeOperation('-')
         calc_inst.setDigit(0)
         calc_inst.insertDot()
-        calc_inst.setDigit(6)
+        calc_inst.setDigit(3)
         calc_inst.makeOperation('=')
 
-        expect(calc_inst.state.displayVal).toEqual('0.9')
+        expect(calc_inst.state.displayVal).toEqual('0.6')
         expect(calc_inst.state.afterOperation).toEqual(true)
-        expect(calc_inst.state.value).toEqual(0.9)
+        expect(calc_inst.state.value).toEqual(0.6)
         expect(calc_inst.state.operator).toEqual('=')
     })
 
