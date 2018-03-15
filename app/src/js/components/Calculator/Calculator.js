@@ -147,7 +147,7 @@ class Calculator extends React.Component {
 			}
 			decimalDivider = parseFloat(decimalDivider);
 
-			console.log(decimalDivider)
+			// console.log(decimalDivider)
 			
 			const formattedValue = Math.round(parseFloat(newValue) * decimalDivider) / decimalDivider;
 
