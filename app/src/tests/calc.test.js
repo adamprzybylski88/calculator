@@ -25,11 +25,11 @@ describe('<Calculator />', () => {
         expect(keys_operations.length).toEqual(1);
     });
 
-    it('renders input buttons (12) ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "AC"]', () => {
+    it('renders input buttons (length === 12) ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "AC"]', () => {
         expect(keys_inputs.find('button').length).toEqual(12);
     });
 
-    it('renders operation buttons (3) ["+", "-", "="]', () => {
+    it('renders operation buttons (length === 3) ["+", "-", "="]', () => {
         expect(keys_operations.find('button').length).toEqual(3);
     });
     
