@@ -27,24 +27,21 @@ var gulp 							= require('gulp'),
 	rename 							= require('gulp-rename'),
 	watch 							= require('gulp-watch'),
 	webserver 						= require('gulp-webserver');
+	// streamify 						= require('gulp-streamify');
 
 const listsLess 					= require('less-plugin-lists')
 var lists 							= new listsLess();
 
 /* react elements */
-// const browserify = require('browserify')
-// const reactify = require('reactify')
-// const source = require('vinyl-source-stream')
+const browserify = require('browserify')
+const babelify = require('babelify');
+const reactify = require('reactify')
+const source = require('vinyl-source-stream')
 // const browserSync = require('browser-sync')
 // const sync = browserSync.create()
 
-// // example
-// browserify(srcPath)
-// 	.transform('reactify')
-// 	.bundle()
-// 	.pipe(source(distFileName))
-// 	.pipe(gulp.dest())
-// 	.pipe(sync.reload)	 
+
+
 	
 
 /* generate listChars from svg files */
@@ -107,29 +104,6 @@ const onErrorBabel = require('./node_modules_lib/on-error-babel.js')
 const onError = require('./node_modules_lib/on-error.js')
 const streamSkip = require('./node_modules_lib/stream-skip.js')
 
-var display_options = {
-
-		// base
-		// show_logs: false,
-		// file_size_limit: false, 			// number as size in [kb] (150) || false
-		// skip_low_difference: false, 		// if dist file exists and size difference is less than 15%, skip file 
-
-		// mirror_structure_all: false, 	// will copy other files to dist if (__src !== __dist)
-		// compressed_folder: false, 		// will generate _compressed folder in each dir and copy there all compressed files
-		// keep_raw: false, 				// will make copy of raw file and name it with `{$filename.raw}` if (__src === __dist) 
-		// overwrite: false, 				// if (__src !== __dist) if file exists, skip // if (__src === __dist) check if file is already compressed +-5%
-		// // overwrite: true && keep_raw: true => check if raw exists and compress file from raw
-
-		// generate_onload_img: false, // placeholder size 800x800 quality 10%
-		// generate_webP: false, // supported only by chrome 
-
-		// // generate options
-		// from_psd: false,
-
-		// generate_indexhtml: true,
-		// generate_sizes: true, // png, jpeg resizing + rename (file.jpg => file_md.jpg)
-		// generate_svg_versions: true, // svg generate versions via object {contentSearch: '', newContent: '', namePart: '', newNamePart: ''}
-	};
 
 // settings
 const settingProjects = require('./settings.js');
@@ -160,7 +134,7 @@ const watchAssets = (dataObj) => {
 		"projName": 			[ dataObj.settings.projName, dataObj.settings.instanceName ], 
 		"watch": 				dataObj.settings.watch,
 
-		"buildBaseDist":		[ dataObj.settings.dist.buildBase.project, dataObj.settings.dist.buildBase.instance ],
+		// "buildBaseDist":		[ dataObj.settings.dist.buildBase.project, dataObj.settings.dist.buildBase.instance ],
 
 		"baseSrc":				dataObj.settings.dist.base,
 		"baseDist":				dataObj.settings.dist.base.dir,
@@ -168,12 +142,16 @@ const watchAssets = (dataObj) => {
 
 		"stylesSrc":			dataObj.settings.src.less,
 		"scriptsSrc":			dataObj.settings.src.js,
+		"reactSrc":				dataObj.settings.src.react,
 
 		"stylesDist": 			dataObj.settings.dist.styles.dir,
 		"stylesDirStructure": 	dataObj.settings.dist.styles.options.dirStructure,
 
 		"scriptsDist": 			dataObj.settings.dist.scripts.dir,
 		"scriptsDirStructure": 	dataObj.settings.dist.scripts.options.dirStructure,
+
+		"reactDist": 			dataObj.settings.dist.react.dir,
+		"reactDirStructure": 	dataObj.settings.dist.react.options.dirStructure,
 
 		"jsonDist": 			dataObj.settings.dist.json.dir,
 		"jsonDirStructure": 	dataObj.settings.dist.json.options.dirStructure,
@@ -200,7 +178,8 @@ const watchAssets = (dataObj) => {
 
 	// styles and scripts src
 	let stylesSrc = _s.stylesSrc,
-		scriptsSrc = _s.scriptsSrc
+		scriptsSrc = _s.scriptsSrc,
+		reactSrc = _s.reactSrc;
 
 	// base dist
 	let baseDist;
@@ -208,7 +187,8 @@ const watchAssets = (dataObj) => {
 
 	// styles and scripts dist
 	let stylesDist,
-		scriptsDist;
+		scriptsDist,
+		reactDist;
 
 	if (_s.stylesDist) {
 		_s.stylesDirStructure 	? stylesDist 	= _s.stylesDist + '/' + _args.distTree.substr(0, _args.distTree.length - 1) 	: stylesDist 	= _s.stylesDist;
@@ -220,6 +200,12 @@ const watchAssets = (dataObj) => {
 		_s.scriptsDirStructure 	? scriptsDist 	= _s.scriptsDist + '/' + _args.distTree.substr(0, _args.distTree.length - 1) 	: scriptsDist 	= _s.scriptsDist;
 	} else if (!_s.scriptsDist) {
 		scriptsDist = baseDist
+	}
+	
+	if (_s.reactDist) {
+		_s.reactDirStructure 	? reactDist 	= _s.reactDist + '/' + _args.distTree.substr(0, _args.distTree.length - 1) 	: reactDist 	= _s.reactDist;
+	} else if (!_s.reactDist) {
+		reactDist = baseDist
 	}
 
 	// json, fonts, images, pdf dist
@@ -278,7 +264,7 @@ const watchAssets = (dataObj) => {
 	extName = _args.extName // needed to ignore js, less
 
 	input = path + fileName
-
+ 
 	switch (extName) {
 		case 'less':
 		dist = stylesDist
@@ -288,6 +274,11 @@ const watchAssets = (dataObj) => {
 		case 'js':
 		dist = scriptsDist
 		group = 'js'
+		break;
+
+		case 'jsx':
+		dist = reactDist
+		group = 'jsx'
 		break;
 
 		case 'json':
@@ -408,6 +399,7 @@ const watchAssets = (dataObj) => {
 		// prevent multiple script fireing on multiple files changed in one row
 		let less_once = true,
 			js_once = true,
+			jsx_once = true,
 			iconColors_once = true
 		
 		// reset data collect
@@ -504,13 +496,19 @@ const watchAssets = (dataObj) => {
 							.pipe(rename('style.css'))
 							.pipe(gulp.dest(dist))
 							.on('end', function() {
-						
-								generateLog(instanceName, 'less', dist + '/' + 'style.css', dist + '/' + 'style.css', new Date() - time_now)
 
-								setTimeout(() => {
+								if ( fs.existsSync(`${dist}/style.css`) ) {
+									generateLog(instanceName, 'less', dist + '/' + 'style.css', dist + '/' + 'style.css', new Date() - time_now)
+
 									k++
 									transformFiles(k)
-								}, 50)
+								} else {		
+									fs.createWriteStream(`${dist}/style.css`)
+									setTimeout(() => {
+										transformFiles(k)
+									}, 50)
+								}
+						
 							})
 
 					} else {
@@ -537,6 +535,8 @@ const watchAssets = (dataObj) => {
 							// }))
 							.on('error', (error) => {
 								onErrorBabel(error)
+
+								k++
 								transformFiles(k)
 							})
 							.pipe(uglify({
@@ -545,15 +545,90 @@ const watchAssets = (dataObj) => {
 							.pipe(concat('script.js'))
 							.pipe(gulp.dest(dist))
 							.on('end', function() {
-								
-								generateLog(instanceName, 'js', dist + '/' + 'script.js', dist + '/' + 'script.js', new Date() - time_now)
+						
+								if ( fs.existsSync(`${dist}/script.js`) ) {
+									generateLog(instanceName, 'js', dist + '/' + 'script.js', dist + '/' + 'script.js', new Date() - time_now)
 
-								setTimeout(() => {
 									k++
 									transformFiles(k)
-								}, 50)
+								} else {		
+									fs.createWriteStream(`${dist}/script.js`)
+									setTimeout(() => {
+										transformFiles(k)
+									}, 50)
+								}
 							})
 
+					} else {
+						// ignore rest
+						k++
+						transformFiles(k)
+					}
+
+				} else if (group === 'jsx') {	
+					if (jsx_once) {
+						jsx_once = false
+
+					let time_now = new Date();
+
+					browserify(reactSrc)
+						.transform(babelify, { presets: ['es2015', 'react', 'stage-0'] })
+						.bundle()
+						.on('error', (error) => {
+							onErrorBabel(error)
+
+							k++
+							transformFiles(k)
+						})
+						// .pipe(uglify({
+						// 	mangle: false
+						// }))
+						.pipe(source('app.js'))
+						.pipe(gulp.dest(dist))
+						.on('end', function() {
+						
+							if ( fs.existsSync(`${dist}/app.js`) ) {
+								generateLog(instanceName, 'jsx', dist + '/' + 'app.js', dist + '/' + 'app.js', new Date() - time_now)
+
+								k++
+								transformFiles(k)
+							} else {		
+								fs.createWriteStream(`${dist}/app.js`)
+								setTimeout(() => {
+									transformFiles(k)
+								}, 50)
+							}
+						})
+
+					// gulp.src(reactSrc)
+					// 	.pipe(sourcemaps.init())
+					// 	.pipe(babel({
+					// 		presets: ['es2015','react', 'stage-0']
+					// 	}))
+					// 	.on('error', (error) => {
+					// 		onErrorBabel(error)
+
+					// 		k++
+					// 		transformFiles(k)
+					// 	})
+					// 	.pipe(concat('app.js'))
+					// 	.pipe(uglify())
+					// 	.pipe(sourcemaps.write('.'))
+					// 	.pipe(gulp.dest(dist))
+					// 	.on('end', function() {
+					// 		if ( fs.existsSync(`${dist}/app.js`) ) {
+					// 			generateLog(instanceName, 'jsx', dist + '/' + 'app.js', dist + '/' + 'app.js', new Date() - time_now)
+
+					// 			k++
+					// 			transformFiles(k)
+					// 		} else {		
+					// 			fs.createWriteStream(`${dist}/app.js`)
+					// 			setTimeout(() => {
+					// 				transformFiles(k)
+					// 			}, 50)
+					// 		}
+					// 	})
+					
 					} else {
 						// ignore rest
 						k++
@@ -1289,7 +1364,11 @@ const watchProject = (__settings, _i) => {
 				watchProject(__settings, _i);
 		}
 	} else {
-		console.log('[' + timeNow().dim + '] ' + process.argv[2] + ' not found'.red)
+		if (process.argv[2] !== undefined) {
+			console.log('[' + timeNow().dim + '] ' + process.argv[2] + ' not found'.red)
+		} else {
+			console.log('[' + timeNow().dim + '] ' + 'project name is required (node watch projectName)'.red)
+		}
 	}
 }
 watchProject( settingProjects(), 0 );
