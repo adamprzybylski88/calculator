@@ -1,0 +1,1 @@
+"use strict";var hi=function(){return"Hello World"};

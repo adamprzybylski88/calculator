@@ -32,12 +32,12 @@ module.exports = () => {
 			'instanceName': 		'calc',
 			'instanceNameShort': 	'calc',
 
-			'proxy':	[
-							{
-								source: '/',
-								target: 'http://calc.offactory.com.local/'
-							}
-			],
+			// 'proxy':	[
+			// 				{
+			// 					source: '/',
+			// 					target: 'http://calc.offactory.com.local/'
+			// 				}
+			// ],
 
 			'watch':	[ 
 							'app/src/'
@@ -48,11 +48,12 @@ module.exports = () => {
 
 							'less': 	'app/src/less/_base_structure.less',
 							
-							'js': 		[
-										    'app/js/**/*.js'
-                                        ],
+							'js': 		'app/src/js/**/*.js',
                                         
-                            'react':    'app/app.js'
+                            'react':    [
+											'app/src/app.js',
+											'app/src/compontents/**/*.js'
+										]
 			},
 
 			'dist': 	{				
@@ -77,7 +78,7 @@ module.exports = () => {
 														}		
 										},
 
-							'reatcapp': { 
+							'react': { 
 											'dir': 'app/dist',		
 											'options': 	{ 
 															'dirStructure': false

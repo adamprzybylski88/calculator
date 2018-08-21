@@ -1,5 +1,6 @@
 TESTS
-npm run tests
+npm run test
 
 WATCH
-node watch calc
+node watch calc 
+(http://localhost:8080)

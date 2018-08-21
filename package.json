@@ -57,18 +57,22 @@
 		"zlib": "1.0.5"
 	},
 	"devDependencies": {
+		"browserify": "16.2.2",
+		"reactify": "1.1.1",
+		"vinyl-source-stream": "2.0.0",
+		"browser-sync": "2.24.6",
 		"babel-jest": "^22.4.1",
 		"babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
 		"babel-plugin-transform-object-rest-spread": "^6.26.0",
 		"babel-preset-env": "^1.6.1",
 		"babel-preset-react": "^6.24.1",
 		"babel-register": "^6.26.0",
+		"react-addons-test-utils": "^15.6.2",
+		"react-test-renderer": "^15.6.2",
 		"enzyme": "^3.3.0",
 		"enzyme-adapter-react-15": "^1.0.5",
 		"jest": "^22.4.2",
-		"jest-runtime": "22.4.2",
-		"react-addons-test-utils": "^15.6.2",
-		"react-test-renderer": "^15.6.2"
+		"jest-runtime": "22.4.2"
 	},
 	"scripts": {
 		"test": "jest ./app/tests/*.test.js"
