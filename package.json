@@ -3,6 +3,7 @@
 	"version": "1.0.5",
 	"description": "",
 	"dependencies": {
+
 		"babel-core": "6.26.0",
 		"babel-loader": "7.1.2",
 		"babel-plugin-add-module-exports": "0.2.1",
@@ -18,6 +19,7 @@
 		"react-point": "3.0.1",
 		"react-router": "4.2.0",
 		"redux": "3.7.2",
+
 		"gulp": "3.9.1",
 		"gulp-babel": "7.0.0",
 		"gulp-concat": "2.6.1",
@@ -32,6 +34,8 @@
 		"gulp-json-minify": "1.2.2",
 		"gulp-webserver": "0.9.1",
 		"gulp-connect": "5.5.0",
+		"gulp-streamify": "1.0.2",
+
 		"colors": "1.1.2",
 		"stream": "0.0.2",
 		"shelljs": "0.8.2",
@@ -66,7 +70,7 @@
 		"babelify": "^8.0.0",
 		"browser-sync": "2.24.6",
 		"browserify": "16.2.2",
-		"color-convert": "^1.9.2",
+
 		"enzyme": "^3.3.0",
 		"enzyme-adapter-react-15": "^1.0.5",
 		"jest": "^22.4.2",
