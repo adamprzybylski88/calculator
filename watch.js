@@ -26,8 +26,8 @@ var gulp 							= require('gulp'),
 	plumber 						= require('gulp-plumber'),
 	rename 							= require('gulp-rename'),
 	watch 							= require('gulp-watch'),
-	webserver 						= require('gulp-webserver'),
-	streamify 						= require('gulp-streamify');
+	webserver 						= require('gulp-webserver');
+	// streamify 						= require('gulp-streamify');
 
 const listsLess 					= require('less-plugin-lists')
 var lists 							= new listsLess();
@@ -37,8 +37,8 @@ const browserify = require('browserify')
 const babelify = require('babelify');
 const reactify = require('reactify')
 const source = require('vinyl-source-stream')
-const browserSync = require('browser-sync')
-const sync = browserSync.create()
+// const browserSync = require('browser-sync')
+// const sync = browserSync.create()
 
 
 
@@ -399,6 +399,7 @@ const watchAssets = (dataObj) => {
 		// prevent multiple script fireing on multiple files changed in one row
 		let less_once = true,
 			js_once = true,
+			jsx_once = true,
 			iconColors_once = true
 		
 		// reset data collect
@@ -534,6 +535,8 @@ const watchAssets = (dataObj) => {
 							// }))
 							.on('error', (error) => {
 								onErrorBabel(error)
+
+								k++
 								transformFiles(k)
 							})
 							.pipe(uglify({
@@ -563,21 +566,28 @@ const watchAssets = (dataObj) => {
 					}
 
 				} else if (group === 'jsx') {	
+					if (jsx_once) {
+						jsx_once = false
+
+					let time_now = new Date();
 
 					browserify(reactSrc)
-						.transform(babelify, { presets: ["es2015", "react"] })
+						.transform(babelify, { presets: ['es2015', 'react', 'stage-0'] })
 						.bundle()
+						.on('error', (error) => {
+							onErrorBabel(error)
+
+							k++
+							transformFiles(k)
+						})
+						// .pipe(uglify({
+						// 	mangle: false
+						// }))
 						.pipe(source('app.js'))
 						.pipe(gulp.dest(dist))
-						.pipe(sync.reload)
-						// .pipe(rename('all.min.js'))
-						// .pipe(streamify(concat('all.min.js')))
-						// .pipe(streamify(uglify()))
-						// .pipe(sourcemaps.write('.'))
-						// .pipe(gulp.dest('build'));
 						.on('end', function() {
 						
-							if ( fs.existsSync(`${dist}/app.jsx`) ) {
+							if ( fs.existsSync(`${dist}/app.js`) ) {
 								generateLog(instanceName, 'jsx', dist + '/' + 'app.js', dist + '/' + 'app.js', new Date() - time_now)
 
 								k++
@@ -590,9 +600,40 @@ const watchAssets = (dataObj) => {
 							}
 						})
 
-					k++
-					transformFiles(k)
+					// gulp.src(reactSrc)
+					// 	.pipe(sourcemaps.init())
+					// 	.pipe(babel({
+					// 		presets: ['es2015','react', 'stage-0']
+					// 	}))
+					// 	.on('error', (error) => {
+					// 		onErrorBabel(error)
+
+					// 		k++
+					// 		transformFiles(k)
+					// 	})
+					// 	.pipe(concat('app.js'))
+					// 	.pipe(uglify())
+					// 	.pipe(sourcemaps.write('.'))
+					// 	.pipe(gulp.dest(dist))
+					// 	.on('end', function() {
+					// 		if ( fs.existsSync(`${dist}/app.js`) ) {
+					// 			generateLog(instanceName, 'jsx', dist + '/' + 'app.js', dist + '/' + 'app.js', new Date() - time_now)
+
+					// 			k++
+					// 			transformFiles(k)
+					// 		} else {		
+					// 			fs.createWriteStream(`${dist}/app.js`)
+					// 			setTimeout(() => {
+					// 				transformFiles(k)
+					// 			}, 50)
+					// 		}
+					// 	})
 					
+					} else {
+						// ignore rest
+						k++
+						transformFiles(k)
+					}
 
 				} else if (group === 'json') {
 					gulp

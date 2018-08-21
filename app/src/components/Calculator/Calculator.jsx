@@ -3,6 +3,7 @@ import PointTarget from 'react-point'
 
 // output scaling in calculator display
 class OutputScaling extends React.Component {
+	
 	state = {
 		scale: 1
 	};
