@@ -1,0 +1,44 @@
+.make-classes(@prefix, @list, @class) {
+	.iter(length(@list));
+
+	.iter(@i) when (@i > 0) {
+		.iter(@i - 1);
+		@pair: extract(@list, @i);
+		@key: extract(@pair, 1);
+		@value: extract(@pair, 2);
+
+		.@{prefix}@{key} {
+			@{class}: @value;
+		}
+	}
+}
+
+.make-and-classes(@prefix, @list, @class) {
+	.iter(length(@list));
+
+	.iter(@i) when (@i > 0) {
+		.iter(@i - 1);
+		@pair: extract(@list, @i);
+		@key: extract(@pair, 1);
+		@value: extract(@pair, 2);
+
+		&.@{prefix}@{key} {
+			@{class}: @value;
+		}
+	}
+}
+
+.make-classes-important(@prefix, @list, @class) {
+	.iter(length(@list));
+
+	.iter(@i) when (@i > 0) {
+		.iter(@i - 1);
+		@pair: extract(@list, @i);
+		@key: extract(@pair, 1);
+		@value: extract(@pair, 2);
+
+		.@{prefix}@{key} {
+			@{class}: @value !important;
+		}
+	}
+}
