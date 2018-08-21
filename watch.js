@@ -26,17 +26,22 @@ var gulp 							= require('gulp'),
 	plumber 						= require('gulp-plumber'),
 	rename 							= require('gulp-rename'),
 	watch 							= require('gulp-watch'),
-	webserver 						= require('gulp-webserver');
+	webserver 						= require('gulp-webserver'),
+	streamify 						= require('gulp-streamify');
 
 const listsLess 					= require('less-plugin-lists')
 var lists 							= new listsLess();
 
 /* react elements */
 const browserify = require('browserify')
+const babelify = require('babelify');
 const reactify = require('reactify')
 const source = require('vinyl-source-stream')
 const browserSync = require('browser-sync')
 const sync = browserSync.create()
+
+
+
 	
 
 /* generate listChars from svg files */
@@ -560,11 +565,16 @@ const watchAssets = (dataObj) => {
 				} else if (group === 'jsx') {	
 
 					browserify(reactSrc)
-						.transform('reactify')
+						.transform(babelify, { presets: ["es2015", "react"] })
 						.bundle()
-						.pipe(source('app.jsx'))
+						.pipe(source('app.js'))
 						.pipe(gulp.dest(dist))
 						.pipe(sync.reload)
+						// .pipe(rename('all.min.js'))
+						// .pipe(streamify(concat('all.min.js')))
+						// .pipe(streamify(uglify()))
+						// .pipe(sourcemaps.write('.'))
+						// .pipe(gulp.dest('build'));
 						.on('end', function() {
 						
 							if ( fs.existsSync(`${dist}/app.jsx`) ) {
@@ -1313,7 +1323,11 @@ const watchProject = (__settings, _i) => {
 				watchProject(__settings, _i);
 		}
 	} else {
-		console.log('[' + timeNow().dim + '] ' + process.argv[2] + ' not found'.red)
+		if (process.argv[2] !== undefined) {
+			console.log('[' + timeNow().dim + '] ' + process.argv[2] + ' not found'.red)
+		} else {
+			console.log('[' + timeNow().dim + '] ' + 'project name is required (node watch projectName)'.red)
+		}
 	}
 }
 watchProject( settingProjects(), 0 );

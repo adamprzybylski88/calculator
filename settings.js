@@ -50,10 +50,7 @@ module.exports = () => {
 							
 							'js': 		'app/src/js/**/*.js',
                                         
-                            'react':    [
-											'app/src/app.js',
-											'app/src/compontents/**/*.js'
-										]
+                            'react':    'app/src/app.jsx'
 			},
 
 			'dist': 	{				
