@@ -1,0 +1,5 @@
+TESTS
+npm run tests
+
+WATCH
+node watch calc
