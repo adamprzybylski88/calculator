@@ -26,8 +26,8 @@ var gulp 							= require('gulp'),
 	plumber 						= require('gulp-plumber'),
 	rename 							= require('gulp-rename'),
 	watch 							= require('gulp-watch'),
-	webserver 						= require('gulp-webserver');
-	// streamify 						= require('gulp-streamify');
+	webserver 						= require('gulp-webserver'),
+	streamify 						= require('gulp-streamify');
 
 const listsLess 					= require('less-plugin-lists')
 var lists 							= new listsLess();
@@ -580,10 +580,8 @@ const watchAssets = (dataObj) => {
 							k++
 							transformFiles(k)
 						})
-						// .pipe(uglify({
-						// 	mangle: false
-						// }))
 						.pipe(source('app.js'))
+						.pipe(streamify(uglify()))
 						.pipe(gulp.dest(dist))
 						.on('end', function() {
 						
@@ -1267,6 +1265,11 @@ const watchAssets = (dataObj) => {
 }
 
 const generatePaths = (cb) => {
+	console.log(cb.history)
+	console.log(cb.cwd)
+	console.log(cb.base)
+	console.log(cb._isVinyl)
+	console.log(cb.event)
 	let buf, ext;
 	let event, path, fileName, extName, treeArr;
 	let tree = '', distTree = '';
