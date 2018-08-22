@@ -1265,11 +1265,11 @@ const watchAssets = (dataObj) => {
 }
 
 const generatePaths = (cb) => {
-	console.log(cb.history)
-	console.log(cb.cwd)
-	console.log(cb.base)
-	console.log(cb._isVinyl)
-	console.log(cb.event)
+	// console.log(cb.history)
+	// console.log(cb.cwd)
+	// console.log(cb.base)
+	// console.log(cb._isVinyl)
+	// console.log(cb.event)
 	let buf, ext;
 	let event, path, fileName, extName, treeArr;
 	let tree = '', distTree = '';
