@@ -14,6 +14,9 @@ const readChunk 					= require('read-chunk')
 const { PassThrough, Transform } 	= require('stream');
 const stream 						= require('stream');
 
+// new watcher
+const chokidar 						= require('chokidar');
+
 /* gulp */
 var gulp 							= require('gulp'),
 	less 							= require('gulp-less'),
@@ -372,7 +375,8 @@ const watchAssets = (dataObj) => {
 				//////ignore list
 				!(	
 						(		fileObj.fileName 	===	'index.html'
-							||	fileObj.fileName 	===	'.DS_Store'			)
+							||	fileObj.fileName 	===	'.DS_Store'
+							||  fileObj.fileName.indexOf('.goutputstream-') === 0 )
 					||	(
 								fileObj.fileName.indexOf('listChars') > -1
 							&&	extName === 'svg'
@@ -597,35 +601,6 @@ const watchAssets = (dataObj) => {
 								}, 50)
 							}
 						})
-
-					// gulp.src(reactSrc)
-					// 	.pipe(sourcemaps.init())
-					// 	.pipe(babel({
-					// 		presets: ['es2015','react', 'stage-0']
-					// 	}))
-					// 	.on('error', (error) => {
-					// 		onErrorBabel(error)
-
-					// 		k++
-					// 		transformFiles(k)
-					// 	})
-					// 	.pipe(concat('app.js'))
-					// 	.pipe(uglify())
-					// 	.pipe(sourcemaps.write('.'))
-					// 	.pipe(gulp.dest(dist))
-					// 	.on('end', function() {
-					// 		if ( fs.existsSync(`${dist}/app.js`) ) {
-					// 			generateLog(instanceName, 'jsx', dist + '/' + 'app.js', dist + '/' + 'app.js', new Date() - time_now)
-
-					// 			k++
-					// 			transformFiles(k)
-					// 		} else {		
-					// 			fs.createWriteStream(`${dist}/app.js`)
-					// 			setTimeout(() => {
-					// 				transformFiles(k)
-					// 			}, 50)
-					// 		}
-					// 	})
 					
 					} else {
 						// ignore rest
@@ -1265,11 +1240,6 @@ const watchAssets = (dataObj) => {
 }
 
 const generatePaths = (cb) => {
-	// console.log(cb.history)
-	// console.log(cb.cwd)
-	// console.log(cb.base)
-	// console.log(cb._isVinyl)
-	// console.log(cb.event)
 	let buf, ext;
 	let event, path, fileName, extName, treeArr;
 	let tree = '', distTree = '';
@@ -1375,3 +1345,48 @@ const watchProject = (__settings, _i) => {
 	}
 }
 watchProject( settingProjects(), 0 );
+
+
+
+
+// const watcherStart = (path, cb) => {
+	
+// 	let checkBaseChanges = true;
+
+// 	// waiting to check all changes on start
+// 	let timeoutHandle;
+
+// 	let startTimeOut = () => {
+// 		timeoutHandle = setTimeout( () => {
+// 			checkBaseChanges = false
+// 			console.log('[' + timeNow().dim + ']' + ' ... ' + 'watching'.cyan + ' ... ')
+// 		}, 500);
+// 	}
+
+// 	let stopTimeOut = () => {
+// 		clearTimeout(timeoutHandle);
+// 	}
+
+// 	// watching
+// 	chokidar.watch(path, {
+// 		persistent: true
+// 	})
+// 	.on('all', (event, path) => {
+// 		if (!checkBaseChanges) {
+// 			cb({event, path})
+// 		} else {
+// 			stopTimeOut()
+// 			startTimeOut()
+// 		}
+// 	});
+// }
+
+// watcherStart('./watchTest', (cb) => {
+// 	console.log(cb)
+// });
+
+
+
+
+/// scan src if has no duplicated image names (upper and lower letters)
+/// create build

@@ -7,7 +7,6 @@ Enzyme.configure({ adapter: new Adapter() });
 
 import Calculator from '../src/components/Calculator/Calculator.jsx'
 
-
 describe('<Calculator />', () => {
     const calc = shallow(<Calculator />).render();
     const calc_inst = shallow(<Calculator />).instance();
