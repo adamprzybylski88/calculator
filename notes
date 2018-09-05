@@ -2,4 +2,6 @@ TESTS
 npm run test
 
 WATCH
-node watch calc (it starts app on http://localhost:8080)
+node watch calc 
+
+node watch calc run-dev (starts localhost on http://localhost:8080), app is on http://localhost:8080/app/index.html

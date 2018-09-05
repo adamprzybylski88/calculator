@@ -27,7 +27,7 @@ class OutputScaling extends React.Component {
 	}
 
 	render() {
-	const { scale } = this.state
+		const { scale } = this.state
 
 		return (
 			<span style={{ transform: `scale(${scale},${scale})` }} ref={node => this.node = node}>{this.props.children}</span>

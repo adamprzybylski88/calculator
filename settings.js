@@ -32,12 +32,12 @@ module.exports = () => {
 			'instanceName': 		'calc',
 			'instanceNameShort': 	'calc',
 
-			// 'proxy':	[
-			// 				{
-			// 					source: '/',
-			// 					target: 'http://calc.offactory.com.local/'
-			// 				}
-			// ],
+			'proxy':	[
+							{
+								source: '/',
+								target: 'http://calc.offactory.com.local/'
+							}
+			],
 
 			'watch':	[ 
 							'app/src/'
