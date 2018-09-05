@@ -14,7 +14,7 @@ const readChunk 					= require('read-chunk')
 const { PassThrough, Transform } 	= require('stream');
 const stream 						= require('stream');
 
-// new watcher
+// new watcher (working great)
 const chokidar 						= require('chokidar');
 
 /* gulp */
@@ -527,29 +527,21 @@ const watchAssets = (dataObj) => {
 
 						let time_now = new Date();
 
-						gulp
-							.src(scriptsSrc)
-							.pipe(sourcemaps.init())
-							.pipe(babel({
-								presets: ['es2015', 'stage-0']
-								// , plugins: ['transform-class-properties']
-							}))
-							// .pipe(plumber({
-							// 	errorHandler: onError
-							// }))
+						browserify(scriptsSrc)
+							.transform(babelify, { presets: ['es2015', 'stage-0'] })
+							.bundle()
 							.on('error', (error) => {
 								onErrorBabel(error)
+								console.error( error )
 
 								k++
 								transformFiles(k)
 							})
-							.pipe(uglify({
-								mangle: false
-							}))
-							.pipe(concat('script.js'))
+							.pipe(source('script.js'))
+							.pipe(streamify(uglify()))
 							.pipe(gulp.dest(dist))
 							.on('end', function() {
-						
+							
 								if ( fs.existsSync(`${dist}/script.js`) ) {
 									generateLog(instanceName, 'js', dist + '/' + 'script.js', dist + '/' + 'script.js', new Date() - time_now)
 
@@ -562,6 +554,42 @@ const watchAssets = (dataObj) => {
 									}, 50)
 								}
 							})
+
+						// gulp
+						// 	.src(scriptsSrc)
+						// 	.pipe(sourcemaps.init())
+						// 	.pipe(babel({
+						// 		presets: ['es2015', 'stage-0']
+						// 		// , plugins: ['transform-class-properties']
+						// 	}))
+						// 	// .pipe(plumber({
+						// 	// 	errorHandler: onError
+						// 	// }))
+						// 	.on('error', (error) => {
+						// 		onErrorBabel(error)
+
+						// 		k++
+						// 		transformFiles(k)
+						// 	})
+						// 	.pipe(uglify({
+						// 		mangle: false
+						// 	}))
+						// 	.pipe(concat('script.js'))
+						// 	.pipe(gulp.dest(dist))
+						// 	.on('end', function() {
+						
+						// 		if ( fs.existsSync(`${dist}/script.js`) ) {
+						// 			generateLog(instanceName, 'js', dist + '/' + 'script.js', dist + '/' + 'script.js', new Date() - time_now)
+
+						// 			k++
+						// 			transformFiles(k)
+						// 		} else {		
+						// 			fs.createWriteStream(`${dist}/script.js`)
+						// 			setTimeout(() => {
+						// 				transformFiles(k)
+						// 			}, 50)
+						// 		}
+						// 	})
 
 					} else {
 						// ignore rest
@@ -580,6 +608,7 @@ const watchAssets = (dataObj) => {
 						.bundle()
 						.on('error', (error) => {
 							onErrorBabel(error)
+							console.error( error )
 
 							k++
 							transformFiles(k)
@@ -1298,12 +1327,17 @@ const watchProject = (__settings, _i) => {
 			case _s.instanceName:
 			case _s.instanceNameShort:
 
-				if (_s.proxy) {
+				if (process.argv[3] === 'run-dev' && _s.proxy) {
+
+					let processPort;
+
+					process.argv[4] ? processPort = process.argv[4] : processPort = process.env.port || '8080'
+
 					gulp.src(__dirname)
 					.pipe(
 						webserver({
 							host: process.env.host || 'localhost',
-							port: process.env.port || 8080,
+							port: processPort,
 							open: true,
 							livereload: {
 								enable: true
@@ -1312,7 +1346,10 @@ const watchProject = (__settings, _i) => {
 								enable: true,
 								path: __dirname
 							},
-							proxies: _s.proxy
+							proxies: {
+								source: _s.proxy.source || '/',
+								targer: _s.proxy.target || `http://localhost:${processPort}`
+							}
 						})
 					)
 				}
@@ -1345,9 +1382,6 @@ const watchProject = (__settings, _i) => {
 	}
 }
 watchProject( settingProjects(), 0 );
-
-
-
 
 // const watcherStart = (path, cb) => {
 	
